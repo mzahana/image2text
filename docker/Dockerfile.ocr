@@ -87,11 +87,16 @@ RUN apt install -y apt-transport-https && \
 #
 # Install yolov8 dependencies
 # 
-RUN pip3 install opencv-python
+# RUN pip3 install opencv-python
+# RUN apt install -y python3-opencv \
+# 	&& apt-get -y autoremove \
+# 	&& apt-get clean autoclean \
+# 	&& rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
+
 RUN pip3 install ultralytics
 
 # Install pytesseract
-RUN pip install pytesseract
+RUN pip3 install pytesseract
 
 # Install Tesseract OCR engine
 # Download English language data for Tesseract
@@ -100,7 +105,19 @@ RUN apt-get update && \
 # Check if Tesseract is installed
 RUN tesseract -v
 
-RUN pip install easyocr
+RUN pip3 install easyocr
+
+RUN pip3 uninstall opencv-python-headless -y
+
+RUN apt install -y python3-opencv \
+	&& apt-get -y autoremove \
+	&& apt-get clean autoclean \
+	&& rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
+
+# RUN apt install -y libgtk2.0-dev pkg-config \
+# 	&& apt-get -y autoremove \
+# 	&& apt-get clean autoclean \
+# 	&& rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
 
 # create and start as LOCAL_USER_ID
 COPY scripts/entrypoint.sh /usr/local/bin/entrypoint.sh
